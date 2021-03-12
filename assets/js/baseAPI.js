@@ -3,7 +3,7 @@
 $.ajaxPrefilter(function(options) {
     // 拼接URL 地址
     // console.log(options.url);
-    options.url = 'http://ajax.frontend.itheima.net/' + options.url;
+    options.url = 'http://ajax.frontend.itheima.net' + options.url;
     // 为所有有请求的接口添加 headers
     if (options.url.indexOf('/my/') !== -1) {
         options.headers = { Authorization: localStorage.getItem('token') || '' }

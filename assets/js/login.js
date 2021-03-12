@@ -33,7 +33,7 @@ $(function() {
         e.preventDefault();
         var data = { username: $('.reg-box [name=username]').val(), password: $('.reg-box [name=password]').val() };
 
-        $.post('api/reguser', data, function(res) {
+        $.post('/api/reguser', data, function(res) {
             if (res.status !== 0) {
                 return layer.msg(res.message)
             }
@@ -49,7 +49,7 @@ $(function() {
         // 阻止默认行为
         e.preventDefault();
         $.ajax({
-            url: 'api/login',
+            url: '/api/login',
             method: 'POST',
             data: $(this).serialize(),
             success: function(res) {
