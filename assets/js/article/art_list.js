@@ -21,7 +21,7 @@ $(function() {
 
         var y = dt.getFullYear();
         var m = padZero(dt.getMonth() + 1);
-        var d = padZero(dt.getDay());
+        var d = padZero(dt.getDate());
 
 
         var hh = padZero(dt.getHours());
@@ -34,8 +34,8 @@ $(function() {
 
     // 定义补零函数
     function padZero(n) {
-        n > 9 ? n : '0' + n;
-    }
+        return n > 9 ? n : '0' + n;
+    };
 
 
     initTable();
@@ -146,7 +146,7 @@ $(function() {
             //do something
             $.ajax({
                 method: 'GET',
-                url: '/my/article/delete' + id,
+                url: '/my/article/delete/' + id,
                 success: function(res) {
                     if (res.status !== 0) {
                         return layer.msg('删除文章失败！')
@@ -164,5 +164,48 @@ $(function() {
             })
             layer.close(index);
         });
+    })
+
+    var indexGai = null;
+    // 通过代理的形式为编辑按钮添加点击事件
+    $('tbody').on('click', '#btn_bian', function() {
+        indexGai = layer.open({
+            type: 1,
+            title: '修改文件列表',
+            area: ['500px', '350px'],
+            content: $('#dialog-edit').html()
+        });
+        // 自定义属性
+        var id = $(this).attr('data-id');
+        // console.log(id);
+        $.ajax({
+            method: "GET",
+            url: '/my/article/' + id,
+            success: function(res) {
+                // console.log(res);
+                form.val('form-edit', res.data);
+            }
+        })
+
+    })
+
+
+    // 为修改按钮添加点击事件
+    $('body').on('submit', '#form-edit', function(e) {
+        e.preventDefault();
+        // console.log('ok');
+        $.ajax({
+            method: 'POST',
+            url: '/my/article/updatecate',
+            data: $(this).serialize(),
+            success: function(res) {
+                if (res.status !== 0) {
+                    return layer.msg('修改文章分类数据失败！')
+                }
+                layer.msg('修改文章分类数据成功！');
+                layer.close(indexGai);
+                initTable();
+            }
+        })
     })
 })
